@@ -1,10 +1,12 @@
 <script lang="ts">
-	import type { CitySuggestion } from "../routes/types/Cities";
+	import type { CitySuggestion, CurrentWeatherResponse } from "../routes/types/Cities";
 	import {PUBLIC_API_KEY} from '$env/static/public';
 	import CitySuggestionInput from "./CitySuggestionInput.svelte";
 
 	let searchInput: HTMLInputElement;
-	let city: CitySuggestion | null;
+	let displayLocation: string = '';
+	let city: CitySuggestion;
+	let cityCurrentWeather: CurrentWeatherResponse;
 	let citiesSuggestions: CitySuggestion[] = [];
 
 	const handleInput = (event: any) => { 
@@ -26,6 +28,18 @@
 		if (!city) { 
 			alert("You didn't type anything.")
 		}
+		displayLocation = `${city.name}, ${city.region}, ${city.country}`
+		const {lat, lon} = city;
+		getCurrentWeather(lat, lon);
+	}
+
+	const getCurrentWeather = (latitude: number, longitude: number): void => {
+		fetch(`http://api.weatherapi.com/v1/current.json?key=${PUBLIC_API_KEY}&q=${latitude} ${longitude}&aqi=no`)
+		.then(response => response.json())
+		.then((response: CurrentWeatherResponse) => {
+			cityCurrentWeather = response;
+			console.log(cityCurrentWeather);
+		})
 	}
 	
 	let hiLiteIndex: number = 0;
@@ -43,7 +57,6 @@
 	}	 
 </script>
 
-
 <svelte:window on:keydown={navigateList} />
 
 <form autocomplete="off" on:submit|preventDefault={submitValue}>
@@ -52,6 +65,7 @@
 		id="city-input" 
 		type="text" 
 		placeholder="Search City Names" 
+		bind:value={displayLocation}
 		bind:this={searchInput}
 		on:input={handleInput}
 	>
@@ -69,6 +83,12 @@
 		</ul>
 	{/if}
 </form>
+
+<div>
+	{#if cityCurrentWeather}
+		<p>{cityCurrentWeather.current.condition.text}</p>
+	{/if}
+</div>
 	
 <style>
 div.autocomplete {
