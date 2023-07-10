@@ -2,12 +2,18 @@
 	import type { CitySuggestion, CurrentWeatherResponse } from "../routes/types/Cities";
 	import {PUBLIC_API_KEY} from '$env/static/public';
 	import CitySuggestionInput from "./CitySuggestionInput.svelte";
+	import CurrentWeatherCard from "./CurrentWeatherCard.svelte";
 
-	let searchInput: HTMLInputElement;
 	let displayLocation: string = '';
 	let city: CitySuggestion;
 	let cityCurrentWeather: CurrentWeatherResponse;
 	let citiesSuggestions: CitySuggestion[] = [];
+
+	let adviseText: string;
+
+	$: if(cityCurrentWeather?.current.condition.text === 'Light rain') {
+		adviseText = 'Take your umbrella !'
+	}
 
 	const handleInput = (event: any) => { 
 		event.preventDefault()
@@ -38,7 +44,6 @@
 		.then(response => response.json())
 		.then((response: CurrentWeatherResponse) => {
 			cityCurrentWeather = response;
-			console.log(cityCurrentWeather);
 		})
 	}
 	
@@ -59,24 +64,24 @@
 
 <svelte:window on:keydown={navigateList} />
 
-<form autocomplete="off" on:submit|preventDefault={submitValue}>
-  <div class="autocomplete">
-    <input 
-		id="city-input" 
+<form autocomplete="off" on:submit|preventDefault={submitValue} class="container">
+  <div class="autocomplete input-group mb-3">
+	<input 
 		type="text" 
-		placeholder="Search City Names" 
+		id="city-input" 
+		class="form-control" 
+		placeholder="Entrez un nom de ville" 
 		bind:value={displayLocation}
-		bind:this={searchInput}
 		on:input={handleInput}
 	>
   </div>
-  <input type="submit">
+  <button type="submit" class="btn btn-success">On croise les doigts...</button>
 	{#if citiesSuggestions.length > 0}
 		<ul id="autocomplete-items-list">
-			{#each citiesSuggestions as city, i}
+			{#each citiesSuggestions as city, index}
 				<CitySuggestionInput 
 					itemLabel={`${city.name}, ${city.region}, ${city.country}`} 
-					highlighted={i === hiLiteIndex} 
+					highlighted={index === hiLiteIndex} 
 					on:click={() => setInputVal(city)} 
 				/>
 			{/each}			
@@ -84,25 +89,25 @@
 	{/if}
 </form>
 
-<div>
-	{#if cityCurrentWeather}
-		<p>{cityCurrentWeather.current.condition.text}</p>
-	{/if}
-</div>
+<CurrentWeatherCard {cityCurrentWeather}/>
+
+{#if adviseText}
+	<h3>{adviseText}</h3>
+{/if}
 	
 <style>
 div.autocomplete {
   /*the container must be positioned relative:*/
   position: relative;
   display: inline-block;
-	width: 300px;
+  width: 300px;
 }
 input {
   border: 1px solid transparent;
   background-color: #f1f1f1;
   padding: 10px;
   font-size: 16px;
-	margin: 0;
+  margin: 0;
 }
 input[type=text] {
   background-color: #f1f1f1;
@@ -112,12 +117,11 @@ input[type=submit] {
   background-color: DodgerBlue;
   color: #fff;
 }
-	
 #autocomplete-items-list {
-	position: relative;
+	position: absolute;
 	margin: 0;
 	padding: 0;
-	top: 0;
+	top: 10;
 	width: 297px;
 	border: 1px solid #ddd;
 	background-color: #ddd;
