@@ -1,3 +1,4 @@
+import type { AirQuality } from "./AirQuality"
 import type { WeatherText } from "./Mood"
 
 export type CitySuggestion = {
@@ -49,15 +50,6 @@ export type CurrentWeatherResponse = {
 		uv: number,
 		gust_mph: number,
 		gust_kph: number,
-		air_quality: {
-			co: number,
-			no2: number,
-			o3: number,
-			so2: number,
-			pm2_5: number,
-			pm10: number,
-			us_epa_index: number,
-			gb_defra_index: number
-		}
+		air_quality: AirQuality
 	}
 }

@@ -5,10 +5,13 @@
 	import CurrentWeatherCard from "../components/CurrentWeatherCard.svelte";
 	import { Mood, WeatherText } from "../types/Mood";
 	import MoodText from "../components/MoodText.svelte";
+	import type { AirQuality } from "../types/AirQuality";
+	import CurrentAirQualityCard from "../components/CurrentAirQualityCard.svelte";
 
 	let displayLocation: string = '';
 	let city: CitySuggestion;
 	let cityCurrentWeather: CurrentWeatherResponse;
+	let airQuality: AirQuality;
 	let citiesSuggestions: CitySuggestion[] = [];
 	let moodText: string;
 
@@ -52,10 +55,17 @@
 	}
 
 	const getCurrentWeather = (latitude: number, longitude: number): void => {
-		fetch(`http://api.weatherapi.com/v1/current.json?key=${PUBLIC_API_KEY}&q=${latitude} ${longitude}&aqi=no`)
+		fetch(`http://api.weatherapi.com/v1/current.json?key=${PUBLIC_API_KEY}&q=${latitude} ${longitude}&aqi=yes`)
 		.then(response => response.json())
-		.then((response: CurrentWeatherResponse) => {
+		.then((response: any) => {
+			// TODO : Type problème with datat received with '-'
 			cityCurrentWeather = response;
+			airQuality = {
+				...response.current.air_quality,
+				us_epa_index: response.current.air_quality['us-epa-index'],
+				gb_defra_index: response.current.air_quality['gb-defra-index'],
+			} as AirQuality;
+			
 			handleMoodText(response.current.condition.text);
 		})
 	}
@@ -88,7 +98,7 @@
 		on:input={handleInput}
 	>
   </div>
-  <button type="submit" class="btn btn-success mb-1 ms-3">On croise les doigts...</button>
+  <button type="submit" class="btn btn-info mb-1 ms-3">On croise les doigts...</button>
 	{#if citiesSuggestions.length > 0}
 		<ul id="autocomplete-items-list text-center w-50">
 			{#each citiesSuggestions as city, index}
@@ -107,6 +117,8 @@
 {#if moodText}
 	<MoodText {moodText} />
 {/if}
+
+<CurrentAirQualityCard {cityCurrentWeather} {airQuality}/>
 	
 <style>
 div.autocomplete {
