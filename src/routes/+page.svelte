@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Formulaire from "./SearchWeatherForm.svelte";
+	import Formulaire from "./SearchWeather.svelte";
 </script>
 
 <main class="container">

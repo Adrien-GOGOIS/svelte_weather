@@ -8,3 +8,13 @@ export type AirQuality = {
 	us_epa_index: number, 
 	gb_defra_index: number 
 }
+
+export enum AirQualityIndex {
+	NO_DATA = 'bg-light',
+	GOOD = 'bg-success',
+	MODERATE = 'bg-info',
+	UNHEALTHY_FOR_SOME = 'bg-primary',
+	UNHEALTHY = 'bg-warning',
+	VERY_UNHEALTHY = 'bg-danger',
+	HAZARDOUS = 'bg-dark',
+}
