@@ -1,18 +1,30 @@
 <script lang="ts">
-	import type { CitySuggestion, CurrentWeatherResponse } from "../routes/types/Cities";
+	import type { CitySuggestion, CurrentWeatherResponse } from "../types/Cities";
 	import {PUBLIC_API_KEY} from '$env/static/public';
-	import CitySuggestionInput from "./CitySuggestionInput.svelte";
-	import CurrentWeatherCard from "./CurrentWeatherCard.svelte";
+	import CitySuggestionInput from "../components/CitySuggestionInput.svelte";
+	import CurrentWeatherCard from "../components/CurrentWeatherCard.svelte";
+	import { Mood, WeatherText } from "../types/Mood";
+	import MoodText from "../components/MoodText.svelte";
 
 	let displayLocation: string = '';
 	let city: CitySuggestion;
 	let cityCurrentWeather: CurrentWeatherResponse;
 	let citiesSuggestions: CitySuggestion[] = [];
+	let moodText: string;
 
-	let adviseText: string;
-
-	$: if(cityCurrentWeather?.current.condition.text === 'Light rain') {
-		adviseText = 'Take your umbrella !'
+	const handleMoodText = (weather: string) => {
+		if(weather === WeatherText.LIGHT_RAIN || weather === WeatherText.RAIN) {
+			moodText = Mood.UMBRELLA
+		}
+		if(weather === WeatherText.MIST) {
+			moodText = Mood.BLIND
+		}
+		if(weather === WeatherText.OVERCAST) {			
+			moodText = Mood.CAREFUL
+		}
+		if(weather === WeatherText.SUNNY || weather === WeatherText.CLEAR || weather === WeatherText.PARTLY_CLOUDY) {
+			moodText = Mood.GRUMPY
+		}
 	}
 
 	const handleInput = (event: any) => { 
@@ -44,6 +56,7 @@
 		.then(response => response.json())
 		.then((response: CurrentWeatherResponse) => {
 			cityCurrentWeather = response;
+			handleMoodText(response.current.condition.text);
 		})
 	}
 	
@@ -64,7 +77,7 @@
 
 <svelte:window on:keydown={navigateList} />
 
-<form autocomplete="off" on:submit|preventDefault={submitValue} class="container">
+<form autocomplete="off" on:submit|preventDefault={submitValue} class="container text-center mt-5">
   <div class="autocomplete input-group mb-3">
 	<input 
 		type="text" 
@@ -75,9 +88,9 @@
 		on:input={handleInput}
 	>
   </div>
-  <button type="submit" class="btn btn-success">On croise les doigts...</button>
+  <button type="submit" class="btn btn-success mb-1 ms-3">On croise les doigts...</button>
 	{#if citiesSuggestions.length > 0}
-		<ul id="autocomplete-items-list">
+		<ul id="autocomplete-items-list text-center w-50">
 			{#each citiesSuggestions as city, index}
 				<CitySuggestionInput 
 					itemLabel={`${city.name}, ${city.region}, ${city.country}`} 
@@ -91,8 +104,8 @@
 
 <CurrentWeatherCard {cityCurrentWeather}/>
 
-{#if adviseText}
-	<h3>{adviseText}</h3>
+{#if moodText}
+	<MoodText {moodText} />
 {/if}
 	
 <style>
@@ -112,10 +125,6 @@ input {
 input[type=text] {
   background-color: #f1f1f1;
   width: 100%;
-}
-input[type=submit] {
-  background-color: DodgerBlue;
-  color: #fff;
 }
 #autocomplete-items-list {
 	position: absolute;

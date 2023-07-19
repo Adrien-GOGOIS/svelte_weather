@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { CurrentWeatherResponse } from "../routes/types/Cities";
+	import type { CurrentWeatherResponse } from "../types/Cities";
 
 	export let cityCurrentWeather: CurrentWeatherResponse;
 </script>

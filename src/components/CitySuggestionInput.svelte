@@ -3,6 +3,8 @@
 	export let highlighted: boolean;
 </script>
 
+<li class="autocomplete-items" class:autocomplete-active={highlighted} on:click>{@html itemLabel}</li>
+
 <style>
 li.autocomplete-items {
 	list-style: none;
@@ -33,5 +35,3 @@ li.autocomplete-items:active {
 	color: #ffffff;
 }
 </style>
-
-<li class="autocomplete-items" class:autocomplete-active={highlighted} on:click>{@html itemLabel}</li>
