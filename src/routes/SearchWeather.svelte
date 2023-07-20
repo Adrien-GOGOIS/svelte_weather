@@ -2,7 +2,6 @@
 	import type { CitySuggestion, CurrentWeatherResponse } from "../types/Cities";
 	import {PUBLIC_API_KEY} from '$env/static/public';
 	import CurrentWeatherCard from "../components/CurrentWeatherCard.svelte";
-	import MoodText from "../components/MoodText.svelte";
 	import type { AirQuality } from "../types/AirQuality";
 	import CurrentAirQualityCard from "../components/CurrentAirQualityCard.svelte";
 	import SearchWeatherForm from "../components/SearchWeather/SearchWeatherForm.svelte";
@@ -23,7 +22,7 @@
 		fetch(`http://api.weatherapi.com/v1/current.json?key=${PUBLIC_API_KEY}&q=${latitude} ${longitude}&aqi=yes`)
 		.then(response => response.json())
 		.then((response: any) => {
-			cityCurrentWeather = response;
+			cityCurrentWeather = response as CurrentWeatherResponse;
 			// TODO : Type problem below with data received with '-'
 			airQuality = {
 				...response.current.air_quality,
@@ -32,7 +31,6 @@
 			} as AirQuality;
 		})
 	}	
-	 
 </script>
 
 <div>

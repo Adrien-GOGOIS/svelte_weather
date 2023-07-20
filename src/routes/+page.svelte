@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Formulaire from "./SearchWeather.svelte";
+	import Homepage from "./SearchWeather.svelte";
 </script>
 
 <main>
-	<Formulaire />
+	<Homepage />
 </main>

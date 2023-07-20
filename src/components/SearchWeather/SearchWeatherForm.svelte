@@ -1,11 +1,11 @@
 <script lang="ts">
 	import {PUBLIC_API_KEY} from '$env/static/public';
 	import type { CitySuggestion } from '../../types/Cities';
-	import CitySuggestionInput from './CitySuggestionInput.svelte';
 
 	let hiLiteIndex: number = 0;
 	let citiesSuggestions: CitySuggestion[] = [];
 	let displayLocation: string = '';
+	
 	export let city: CitySuggestion;
 
 	const handleInput = (event: any) => { 
@@ -50,19 +50,19 @@
 		  bind:value={displayLocation}
 		  on:input={handleInput}
 	  >
-	</div>
+		{#if citiesSuggestions.length > 0}
+	  		<ul id="autocomplete-items-list">
+				{#each citiesSuggestions as city, index}
+					<li class="autocomplete-items" class:autocomplete-active={index === hiLiteIndex}>
+						<button on:click={() => setInputVal(city)} class='btn'>
+							{`${city.name}, ${city.region}, ${city.country}`}
+						</button>	
+					</li>
+				{/each}		
+			</ul>
+		{/if}	
+	</div>  
 	<button type="submit" class="btn border border-dark border-2 mb-1 ms-3">Recherche</button>
-	  {#if citiesSuggestions.length > 0}
-		  <ul id="autocomplete-items-list text-center w-50">
-			  {#each citiesSuggestions as city, index}
-				  <CitySuggestionInput 
-					  itemLabel={`${city.name}, ${city.region}, ${city.country}`} 
-					  highlighted={index === hiLiteIndex} 
-					  on:click={() => setInputVal(city)} 
-				  />
-			  {/each}			
-		  </ul>
-	  {/if}
   </form>
 
   <style>
@@ -86,9 +86,32 @@
 		position: absolute;
 		margin: 0;
 		padding: 0;
-		top: 10;
+		z-index: 1;
 		width: 297px;
 		border: 1px solid #ddd;
 		background-color: #ddd;
 	}	
+	li.autocomplete-items {
+		list-style: none;
+		border-bottom: 1px solid #d4d4d4;
+		top: 100%;
+		left: 0;
+		right: 0;
+		cursor: pointer;
+		background-color: white;
+	}
+
+	li.autocomplete-items:hover {
+		background-color: rgb(131, 192, 253);
+	}
+
+	li.autocomplete-items:active {
+		background-color: DodgerBlue !important;
+		color: white;
+	}	
+		
+	.autocomplete-active {
+		background-color: DodgerBlue !important;
+		color: white;
+	}
   </style>
