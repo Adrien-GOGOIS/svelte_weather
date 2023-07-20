@@ -39,9 +39,6 @@
 	<SearchWeatherForm on:submit={submitValue} bind:city={city}/>
 	<div>
 		<CurrentWeatherCard {cityCurrentWeather}/>
-		<CurrentAirQualityCard {cityCurrentWeather} {airQuality}/>
+		<CurrentAirQualityCard {airQuality}/>
 	</div>
-	{#if cityCurrentWeather}
-		<MoodText weatherText={cityCurrentWeather.current.condition.text} />
-	{/if}
 </div>

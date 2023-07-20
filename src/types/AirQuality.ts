@@ -10,11 +10,11 @@ export type AirQuality = {
 }
 
 export enum AirQualityIndex {
-	NO_DATA = 'bg-light',
-	GOOD = 'bg-success',
-	MODERATE = 'bg-info',
-	UNHEALTHY_FOR_SOME = 'bg-primary',
-	UNHEALTHY = 'bg-warning',
-	VERY_UNHEALTHY = 'bg-danger',
-	HAZARDOUS = 'bg-dark',
+	NO_DATA = 'Aucune donnée',
+	GOOD = 'Bonne',
+	MODERATE = 'Moyenne',
+	UNHEALTHY_FOR_SOME = 'Dégradée',
+	UNHEALTHY = 'Mauvaise',
+	VERY_UNHEALTHY = 'Très mauvaise',
+	HAZARDOUS = 'Extrêmement mauvaise',
 }
