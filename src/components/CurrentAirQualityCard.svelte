@@ -3,9 +3,8 @@
 
 	export let airQuality: AirQuality;
 	let airQualityIndexDescription: string;
-	let airQualityBackground: string;
 
-	const getAirQualityIndex = (airQualityIndex: number): string => {
+	const getAirQualityContext = (airQualityIndex: number): string => {
 		airQualityIndexDescription = Object.values(AirQualityIndex)[airQualityIndex];
 		if (airQualityIndex === 1) {
 			return 'bg-good'
@@ -34,7 +33,7 @@
 		<div class="container py-5 h-100">
 			<div class="row d-flex justify-content-center align-items-center h-100">
 				<div class="col-md-8 col-lg-6 col-xl-4">
-					<div class={`card ${getAirQualityIndex(airQuality.us_epa_index)}`}>
+					<div class={`card ${getAirQualityContext(airQuality.us_epa_index)}`}>
 						<div class="card-body p-4">
 							<div class="d-flex">
 								<h6 class="flex-grow-1">Indice de qualité de l'air</h6>
@@ -53,23 +52,23 @@
 
 <style>
 	.bg-good {
-		background-color: rgba(129, 237, 229, 0.8);
+		background-color: rgba(129, 237, 229, 0.9);
 	}
 	.bg-moderate {
-		background-color: rgba(122, 202, 163, 0.8);
+		background-color: rgba(116, 201, 172, 0.9);
 	}
 	.bg-unhealthy-for-some {
-		background-color: rgba(238, 229, 97, 0.8);
+		background-color: rgba(238, 229, 97, 0.9);
 	}
 	.bg-unhealthy {
-		background-color: rgba(233, 131, 82, 0.8);
+		background-color: rgba(236, 94, 87, 0.9);
 	}
 	.bg-very-unhealthy {
-		background-color: rgba(225, 6, 43, 0.8);
+		background-color: rgba(137, 26, 52, 0.9);
 		color: white;
 	}
 	.bg-hazardous {
-		background-color: rgba(39, 13, 43, 0.8);
+		background-color: rgba(115, 40, 125, 0.9);
 		color: white;
 	}
 </style>

@@ -2,6 +2,6 @@
 	import Formulaire from "./SearchWeather.svelte";
 </script>
 
-<main class="container">
+<main>
 	<Formulaire />
 </main>
