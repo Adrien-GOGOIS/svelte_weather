@@ -36,7 +36,9 @@
 <div>
 	<SearchWeatherForm on:submit={submitValue} bind:city={city}/>
 	<div>
-		<CurrentWeatherCard {cityCurrentWeather}/>
-		<CurrentAirQualityCard {airQuality}/>
+		{#if cityCurrentWeather}
+			<CurrentWeatherCard {cityCurrentWeather}/>
+			<CurrentAirQualityCard {airQuality}/>
+		{/if}
 	</div>
 </div>

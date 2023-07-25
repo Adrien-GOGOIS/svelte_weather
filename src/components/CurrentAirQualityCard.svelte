@@ -1,54 +1,38 @@
 <script lang="ts">
+	import { onMount } from "svelte";
 	import { AirQualityIndex, type AirQuality } from "../types/AirQuality";
+	import { getAirQualityContext } from "../utils/airQualityContext";
 
 	export let airQuality: AirQuality;
 	let airQualityIndexDescription: string;
+	let airQualityBackground: string
 
-	const getAirQualityContext = (airQualityIndex: number): string => {
+	onMount(() => {
+		let airQualityIndex: number = airQuality.us_epa_index;
 		airQualityIndexDescription = Object.values(AirQualityIndex)[airQualityIndex];
-		if (airQualityIndex === 1) {
-			return 'bg-good'
-		}
-		if (airQualityIndex === 2) {
-			return 'bg-moderate'
-		}
-		if (airQualityIndex === 3) {
-			return 'bg-unhealthy-for-some'
-		}
-		if (airQualityIndex === 4) {
-			return 'bg-unhealthy'
-		}
-		if (airQualityIndex === 5) {
-			return 'bg-very-unhealthy'
-		}
-		if (airQualityIndex === 6) {
-			return 'bg-hazardous'
-		}
-		return ''
-	}
+		airQualityBackground = getAirQualityContext(airQuality.us_epa_index);
+	})
 </script>
 
-{#if airQuality}
-	<section>
-		<div class="container py-5 h-100">
-			<div class="row d-flex justify-content-center align-items-center h-100">
-				<div class="col-md-8 col-lg-6 col-xl-4">
-					<div class={`card ${getAirQualityContext(airQuality.us_epa_index)}`}>
-						<div class="card-body p-4">
-							<div class="d-flex">
-								<h6 class="flex-grow-1">Indice de qualité de l'air</h6>
-							</div>
-							<div class="d-flex flex-column text-center mt-4 mb-4">
-								<h6 class="display-4 mb-0 font-weight-bold">{airQuality.us_epa_index}</h6>
-								<span class="small">{airQualityIndexDescription}</span>
-							</div>
+<section>
+	<div class="container py-5 h-100">
+		<div class="row d-flex justify-content-center align-items-center h-100">
+			<div class="col-md-8 col-lg-6 col-xl-4">
+				<div class={`card ${airQualityBackground}`}>
+					<div class="card-body p-4">
+						<div class="d-flex">
+							<h6 class="flex-grow-1">Indice de qualité de l'air</h6>
+						</div>
+						<div class="d-flex flex-column text-center mt-4 mb-4">
+							<h6 class="display-4 mb-0 font-weight-bold">{airQuality.us_epa_index}</h6>
+							<span class="small">{airQualityIndexDescription}</span>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</section>
-{/if}
+	</div>
+</section>
 
 <style>
 	.bg-good {
