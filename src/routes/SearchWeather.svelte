@@ -5,14 +5,16 @@
 	import type { AirQuality } from "../types/AirQuality";
 	import CurrentAirQualityCard from "../components/CurrentAirQualityCard.svelte";
 	import SearchWeatherForm from "../components/SearchWeather/SearchWeatherForm.svelte";
+	import ErrorModal from "../components/ErrorModal.svelte";
 
 	let city: CitySuggestion;
 	let cityCurrentWeather: CurrentWeatherResponse;
 	let airQuality: AirQuality;
+	let displayErrorModal: boolean;
 
 	const submitValue = async () => {
 		if (!city) { 
-			alert("You didn't type anything.")
+			displayErrorModal = true;
 		}
 		const {lat, lon} = city;
 		await getCurrentWeather(lat, lon);
@@ -36,6 +38,9 @@
 <div>
 	<SearchWeatherForm on:submit={submitValue} bind:city={city}/>
 	<div>
+		{#if displayErrorModal}
+			<ErrorModal bind:displayErrorModal={displayErrorModal} modalText="Veuillez renseigner une ville"/>
+		{/if}
 		{#if cityCurrentWeather}
 			<CurrentWeatherCard {cityCurrentWeather}/>
 			<CurrentAirQualityCard {airQuality}/>
