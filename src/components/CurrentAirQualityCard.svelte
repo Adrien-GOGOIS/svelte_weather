@@ -1,17 +1,9 @@
 <script lang="ts">
-	import { onMount } from "svelte";
-	import { AirQualityIndex, type AirQuality } from "../types/AirQuality";
-	import { getAirQualityContext } from "../utils/airQualityContext";
+	import type { AirQuality } from "../types/AirQuality";
 
 	export let airQuality: AirQuality;
-	let airQualityIndexDescription: string;
-	let airQualityBackground: string
-
-	onMount(() => {
-		let airQualityIndex: number = airQuality.us_epa_index;
-		airQualityIndexDescription = Object.values(AirQualityIndex)[airQualityIndex];
-		airQualityBackground = getAirQualityContext(airQuality.us_epa_index);
-	})
+	export let airQualityIndexDescription: string
+	export let airQualityBackground: string
 </script>
 
 <section>
