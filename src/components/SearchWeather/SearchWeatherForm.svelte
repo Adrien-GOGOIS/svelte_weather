@@ -35,7 +35,7 @@
 		displayLocation = `${name}, ${country}`
 		citiesSuggestions = [];
 		hiLiteIndex = 0;
-	}	
+	}
 </script>
 
 <svelte:window on:keydown={navigateList} />

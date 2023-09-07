@@ -23,6 +23,25 @@
 		await getCurrentWeather(lat, lon);
 	}
 
+	const handlePosition = () => {
+		const options = {
+			enableHighAccuracy: true,
+			timeout: 5000,
+			maximumAge: 0,
+		};
+
+		async function success(position: { coords: any; }) {
+			const crd = await position.coords;
+			await getCurrentWeather(crd.latitude, crd.longitude)
+		}
+
+		function error(error: { code: any; message: any; }) {
+			console.warn(`ERROR(${error.code}): ${error.message}`);
+		}
+
+		navigator.geolocation.getCurrentPosition(success, error, options);
+	}
+
 	const getCurrentWeather = async (latitude: number, longitude: number): Promise<void> => {
 		fetch(`http://api.weatherapi.com/v1/current.json?key=${PUBLIC_API_KEY}&q=${latitude} ${longitude}&aqi=yes`)
 		.then(response => response.json())
@@ -41,7 +60,10 @@
 </script>
 
 <div>
-	<SearchWeatherForm on:submit={submitValue} bind:city={city}/>
+	<div class="row d-flex justify-content-center align-items-center">
+		<SearchWeatherForm on:submit={submitValue} bind:city={city}/>
+		<button class="btn border border-dark border-2 mb-1 ms-3 w-25" on:click={handlePosition}>Et chez moi ?</button>
+	</div>
 	<div>
 		{#if displayErrorModal}
 			<ErrorModal bind:displayErrorModal={displayErrorModal} modalText="Veuillez renseigner une ville"/>
