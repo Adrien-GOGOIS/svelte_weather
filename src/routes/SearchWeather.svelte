@@ -7,6 +7,7 @@
 	import SearchWeatherForm from "../components/SearchWeather/SearchWeatherForm.svelte";
 	import ErrorModal from "../components/ErrorModal.svelte";
 	import { getAirQualityContext } from "../utils/airQualityContext";
+	import Spinner from "../components/Spinner.svelte";
 
 	let city: CitySuggestion;
 	let cityCurrentWeather: CurrentWeatherResponse;
@@ -67,14 +68,12 @@
 		<SearchWeatherForm on:submit={submitValue} bind:city={city}/>
 		<button class="btn border border-dark border-2 mb-1 ms-3 w-25" on:click={handlePosition}>Et chez moi ?</button>
 	</div>
+	{#if isLoading}
+		<div class="text-center">
+			<Spinner />
+		</div>
+	{/if}
 	<div>
-		{#if isLoading}
-			<div class="d-flex justify-content-center mt-5">
-				<div class="spinner-border" role="status">
-				<span class="visually-hidden">Loading...</span>
-				</div>
-			</div>
-		{/if}
 		{#if displayErrorModal}
 			<ErrorModal bind:displayErrorModal={displayErrorModal} modalText="Veuillez renseigner une ville"/>
 		{/if}
