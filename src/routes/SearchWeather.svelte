@@ -14,6 +14,7 @@
 	let airQualityIndexDescription: string;
 	let airQualityBackground: string;
 	let displayErrorModal: boolean;
+	let isLoading: boolean = false;
 
 	const submitValue = async () => {
 		if (!city) { 
@@ -24,6 +25,7 @@
 	}
 
 	const handlePosition = () => {
+		isLoading = true;
 		const options = {
 			enableHighAccuracy: true,
 			timeout: 5000,
@@ -55,6 +57,7 @@
 			let airQualityIndex: number = airQuality.us_epa_index;
 			airQualityIndexDescription = Object.values(AirQualityIndex)[airQualityIndex];
 			airQualityBackground = getAirQualityContext(airQuality.us_epa_index);
+			isLoading = false;
 		})
 	}	
 </script>
@@ -65,6 +68,13 @@
 		<button class="btn border border-dark border-2 mb-1 ms-3 w-25" on:click={handlePosition}>Et chez moi ?</button>
 	</div>
 	<div>
+		{#if isLoading}
+			<div class="d-flex justify-content-center mt-5">
+				<div class="spinner-border" role="status">
+				<span class="visually-hidden">Loading...</span>
+				</div>
+			</div>
+		{/if}
 		{#if displayErrorModal}
 			<ErrorModal bind:displayErrorModal={displayErrorModal} modalText="Veuillez renseigner une ville"/>
 		{/if}
